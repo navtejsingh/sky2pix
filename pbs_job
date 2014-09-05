@@ -1,0 +1,20 @@
+#!/bin/bash
+#PBS -N pbs_job
+#PBS -q batch
+#PBS -l nodes=3:ppn=4
+#PBS -l walltime=12:00:00
+#PBS -e pbserr.log
+#PBS -o pbsout.log
+#PBS -V
+
+cd $PBS_O_WORKDIR
+
+START=$(date +%s.%N)
+
+mpiexec -np 12 python sky2pix.py in.fits in_rd_deg.cat --quiet
+
+END=$(date +%s.%N)
+
+DIFF=$(echo "$END - $START" | bc)
+
+echo 'Wall time = ' $DIFF ' secs'
